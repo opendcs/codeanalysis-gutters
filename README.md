@@ -2,6 +2,8 @@
 
 This is the README for your extension "pmd-gutters". After writing up a brief description, we recommend including the following sections.
 
+(This will get filled in eventually, I'm still learning how these extensions work.)
+
 ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
