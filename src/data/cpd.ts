@@ -38,11 +38,11 @@ export class DuplicationData {
 }
 
 export class CPDCache {
-    private duplicateData: Array<DuplicationData>;
+    private duplicateData: Map<string,Array<DuplicationData>>;
 
     public constructor(cpdXmlFile: string) {
         //this.fileInfoMap = new Map<String,DuplicationData[]>();
-        this.duplicateData = new Array<DuplicationData>();
+        this.duplicateData = new Map<string,Array<DuplicationData>>();
         var self = this;
         var data = fs.readFileSync(cpdXmlFile, "utf-8");
         xml.parseString(data, (err, cpdData) => {
@@ -70,7 +70,11 @@ export class CPDCache {
                         }
                     });
                     var dupElement = new DuplicationData(file,otherFiles,startLine,endLine,tokensDuplicate);
-                    self.duplicateData.push(dupElement);
+                    if(!self.duplicateData.has(file)) {
+                        self.duplicateData.set(file,new Array<DuplicationData>());
+                    }
+                    var dupSet = self.duplicateData.get(file) || new Array<DuplicationData>();
+                    dupSet.push(dupElement);
                 });
             });
         });

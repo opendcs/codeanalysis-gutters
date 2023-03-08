@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "pmd-gutters.helloWorld",
-        "title": "Hello World"
+        "command": "pmd-gutters.showDuplicates",
+        "title": "Show Duplicate Code"
       }
     ]
   },

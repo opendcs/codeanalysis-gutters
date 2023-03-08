@@ -4,22 +4,19 @@ import * as vscode from 'vscode';
 import { CPDCache } from './data/cpd';
 import { renderGutters } from './gutter';
 
+let data = new CPDCache("/home/mike/projects/pmd-cpd-gutters/pmd-gutters/examples/cpd/cpd.xml");
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	var data = new CPDCache("/home/mike/projects/pmd-cpd-gutters/pmd-gutters/examples/cpd/cpd.xml");    
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "pmd-gutters" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('pmd-gutters.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
+	let disposable = vscode.commands.registerCommand('pmd-gutters.showDuplicates', () => {
 		renderGutters(data,context);
-		//vscode.window.showInformationMessage('Hello World example from pmd-gutters!');
+		vscode.window.onDidChangeActiveTextEditor((editor) => {
+			if (editor !== undefined) {
+				renderGutters(data,context);
+			}
+		});
+
 	});
 
 	context.subscriptions.push(disposable);
