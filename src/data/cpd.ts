@@ -25,8 +25,13 @@ export class DuplicationData {
      * @returns DecorationOptions containing the ranges and links to the other files
      */
     public getDecorationInformation() {
+        var msg = new vscode.MarkdownString("# This is duplicated with: ");
+        this.otherFiles.forEach((fileName) => {
+            msg.appendText("- " + fileName);
+        });
+        
         return {
-            hoverMessage: new vscode.MarkdownString("# This is duplicated with:\r\nOther files."),
+            hoverMessage: msg,
             range: new vscode.Range(this.startLine,0,this.endLine,0)
         };
     }
