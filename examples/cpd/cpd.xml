@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>  
+   <duplication lines="62" tokens="284">
+      <file begintoken="59517" column="2" endcolumn="8" endline="889" endtoken="59800"
+            line="828"
+            path="/home/mike/projects/opendcs/src/main/java/decodes/cwms/CwmsConsumer.java"/>
+      <file begintoken="1403615" column="2" endcolumn="8" endline="711" endtoken="1403898"
+            line="652"
+            path="/home/mike/projects/opendcs/src/main/java/opendcs/opentsdb/OpenTsdbConsumer.java"/>
+      <codefragment><![CDATA[	}
+
+	
+	/**
+	 * This method reads all the Shef/Cwms codes mapping found
+	 * on the DECODES_INSTALL_DIR/shefCwmsParam.prop file. It 
+	 * stores all the properties on the shefCwmsProps Properties 
+	 * object class. These properties will be used when creating 
+	 * the Cwms Param part timeseries descriptor. If it cannot read
+	 * this properties file, this method will fill out the shefCwmsProps
+	 * Properties object with some hard coded shef-cwms mapping values.
+	 * 
+	 * @param shefCwmsFilePath the file of the shefCwmsParam.prop file
+	 */
+	public void loadShefCwmsParamMapping(String shefCwmsFilePath)
+	{
+		//CwmsConstants.SHEF_CWMS_PARAM_FILEPATH
+		shefCwmsProps = new Properties();
+		fillInShefCwmsProps();
+		String shefCwmsMap = "";
+		try 
+		{ 
+			shefCwmsMap = EnvExpander.expand(shefCwmsFilePath);
+			FileInputStream is = new FileInputStream(new File(shefCwmsMap));
+			shefCwmsProps.load(is);
+			is.close();	
+		}
+		catch(IOException ex)
+		{
+			String msg = module + " Cannot read properties file '" + 
+					shefCwmsMap + "': " + ex + " -- will use defaults only.";
+			Logger.instance().info(msg);
+		}
+	}
+	
+	/**
+	 * Fill out the shefCwmsProps Properties Object with hard coded values.
+	 *
+	 */
+	private void fillInShefCwmsProps()
+	{
+		shefCwmsProps.setProperty(CwmsConstants.PC, CwmsConstants.PRECIP);
+		shefCwmsProps.setProperty(CwmsConstants.HG, CwmsConstants.STAGE);
+		shefCwmsProps.setProperty(CwmsConstants.HP, CwmsConstants.STAGE_POOL);
+		shefCwmsProps.setProperty(CwmsConstants.HT, CwmsConstants.STAGE_TAIL);
+		shefCwmsProps.setProperty(CwmsConstants.VB, CwmsConstants.VOLT);
+		shefCwmsProps.setProperty(CwmsConstants.BV, CwmsConstants.VOLT);
+		shefCwmsProps.setProperty(CwmsConstants.HR, CwmsConstants.ELEV);
+		shefCwmsProps.setProperty(CwmsConstants.LF, CwmsConstants.STOR);
+		shefCwmsProps.setProperty(CwmsConstants.QI, CwmsConstants.FLOW_IN);
+		shefCwmsProps.setProperty(CwmsConstants.QR, CwmsConstants.FLOW);
+		shefCwmsProps.setProperty(CwmsConstants.TA, CwmsConstants.TEMP_AIR);
+		shefCwmsProps.setProperty(CwmsConstants.TW, CwmsConstants.TEMP_WATER);
+		shefCwmsProps.setProperty(CwmsConstants.US, CwmsConstants.SPEED_WIND);
+		shefCwmsProps.setProperty(CwmsConstants.UP, CwmsConstants.SPEED_WIND);
+		shefCwmsProps.setProperty(CwmsConstants.UD, CwmsConstants.DIR_WIND);
+	}
+	
+	@Override
+	public PropertySpec[] getSupportedProps()
+	{
+		return myspecs;]]></codefragment>
+   </duplication>
+   <duplication lines="54" tokens="283">
+      <file begintoken="266091" column="3" endcolumn="5" endline="131" endtoken="266373"
+            line="78"
+            path="/home/mike/projects/opendcs/src/main/java/decodes/dbeditor/PlatformSelectDialog.java"/>
+      <file begintoken="266629" column="3" endcolumn="5" endline="109" endtoken="266911"
+            line="56"
+            path="/home/mike/projects/opendcs/src/main/java/decodes/dbeditor/PlatformSelectDialogforSubset.java"/>
+      <codefragment><![CDATA[		plat = null;
+        try 
+		{
+            jbInit();
+			getRootPane().setDefaultButton(selectButton);
+            pack();
+        }
+        catch(Exception ex) 
+		{
+            ex.printStackTrace();
+        }
+		cancelled = false;
+	}
+
+	
+	/** Initialize GUI components. */
+	void jbInit() throws Exception 
+	{
+        titledBorder1 = 
+			new TitledBorder(BorderFactory.createLineBorder(
+				new Color(153, 153, 153),2), 
+				dbeditLabels.getString("PlatformSelectDialog.title"));
+        border1 = BorderFactory.createCompoundBorder(
+			titledBorder1,BorderFactory.createEmptyBorder(5,5,5,5));
+        panel1.setLayout(borderLayout1);
+        jPanel1.setLayout(flowLayout1);
+        selectButton.setText(
+			genericLabels.getString("select"));
+        selectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                selectButton_actionPerformed(e);
+            }
+        });
+        cancelButton.setText(
+			genericLabels.getString("cancel"));
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cancelButton_actionPerformed(e);
+            }
+        });
+        flowLayout1.setHgap(35);
+        flowLayout1.setVgap(10);
+        this.setModal(true);
+        this.setTitle(
+			dbeditLabels.getString("PlatformSelectDialog.title"));
+        jPanel2.setLayout(borderLayout2);
+        jPanel2.setBorder(border1);
+        getContentPane().add(panel1);
+        panel1.add(jPanel1, BorderLayout.SOUTH);
+        jPanel1.add(selectButton, null);
+        jPanel1.add(cancelButton, null);
+        panel1.add(jPanel2, BorderLayout.CENTER);
+        jPanel2.add(selectPanel, BorderLayout.CENTER);
+    }]]></codefragment>
+   </duplication>
+   <duplication lines="83" tokens="277">
+      <file begintoken="1098260" column="6" endcolumn="8" endline="637" endtoken="1098536"
+            line="555"
+            path="/home/mike/projects/opendcs/src/main/java/lrgs/drgsrecv/DrgsRecvMsgThread.java"/>
+      <file begintoken="1102749" column="6" endcolumn="8" endline="409" endtoken="1103025"
+            line="325"
+            path="/home/mike/projects/opendcs/src/main/java/lrgs/drgsrecv/DrgsStats.java"/>
+      <codefragment><![CDATA[					return true;
+				}
+			}
+			else
+				shiftNonePattern();
+		}
+		return false;
+	}
+
+	/** 
+	  Called on start-pattern mismatch. We may have already read part of the
+	  good sync pattern so shift my scratch-pad spr buffer.
+	  Example: startPattern:   0 B 0 A
+	           data on stream: 0 B 0 B 0 A
+	  The match fails on the 4th char, but we can't just discard all 4, 
+	  instead we shift by 2 chars and keep going.
+	*/
+	private void shiftStartPattern()
+	{
+		int shift = 1;
+		for(; shift < startIndex; shift++)
+		{
+			boolean match = true;
+			for(int i = shift; i < startIndex && match; i++)
+				if (spr[i] != startPattern[i-shift])
+					match = false;
+
+			if (match)
+			{
+				for(int i=shift; i<startIndex; i++)
+					spr[i-shift] = spr[i];
+				startIndex -= shift;
+				return;
+			}
+		}
+		if (shift == startIndex) // No match, just start over.
+			startIndex = 0;
+	}
+
+	private void shiftNonePattern()
+	{
+		int shift = 1;
+		for(; shift < noneIndex; shift++)
+		{
+			boolean match = true;
+			for(int i = shift; i < noneIndex && match; i++)
+				if (npr[i] != nonePattern[i-shift])
+					match = false;
+
+			if (match)
+			{
+				for(int i=shift; i<noneIndex; i++)
+					npr[i-shift] = npr[i];
+				noneIndex -= shift;
+				return;
+			}
+		}
+		if (shift == noneIndex) // No match, just start over.
+			noneIndex = 0;
+	}
+	/**
+	  Wait for 51-byte header to be available on the socket, then read
+	  the header and convert it to a DOMSAT DcpMsg object.
+	  Return true if header found, false if available input exhausted and
+	  header is unfinished.
+	  If the 51 byte header has syntax errors, state will be set back to HUNT.
+	*/
+	private boolean headerState()
+		throws IOException
+	{
+		if (input.available() < 51)
+			return false;
+		int n = input.read(headerBuf, 4, 51);
+		if (n != 51)
+		{
+			// This should not happen, we checked above for 51 bytes avail.
+			log(Logger.E_WARNING, DrgsRecv.EVT_BAD_HEADER,
+				"Socket error, 51 available but failed to read 51 -- skipped");
+			state = HUNT_STATE;
+			return false;
+		}
+		try { workingMsg = parseHeader(headerBuf); }
+		catch(BadHeader ex)]]></codefragment>
+   </duplication>
+</pmd-cpd>
