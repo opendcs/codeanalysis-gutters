@@ -29,7 +29,7 @@ export class DuplicationData {
         this.otherFiles.forEach((fileName) => {
             msg.appendText("- " + fileName);
         });
-        
+
         return {
             hoverMessage: msg,
             range: new vscode.Range(this.startLine,0,this.endLine,0)

@@ -16,7 +16,12 @@
       {
         "command": "pmd-gutters.showDuplicates",
         "title": "Show Duplicate Code"
+      },
+      {
+        "command": "pmd-gutters.hideDuplicates",
+        "title": "Hide Duplicate Code Indicators"
       }
+      
     ]
   },
   "scripts": {

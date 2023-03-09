@@ -2,24 +2,20 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { CPDCache } from './data/cpd';
-import { renderGutters } from './gutter';
+import { PMDGutters } from './gutter';
 
 let data = new CPDCache("/home/mike/projects/pmd-cpd-gutters/pmd-gutters/examples/cpd/cpd.xml");
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+
 export function activate(context: vscode.ExtensionContext) {
-
-	let disposable = vscode.commands.registerCommand('pmd-gutters.showDuplicates', () => {
-		renderGutters(data,context);
-		vscode.window.onDidChangeActiveTextEditor((editor) => {
-			if (editor !== undefined) {
-				renderGutters(data,context);
-			}
-		});
-
+	let pmdGutters = new PMDGutters(data,context);
+	let showGutters = vscode.commands.registerCommand('pmd-gutters.showDuplicates', () => {
+		pmdGutters.showDuplicates();
+	});
+	let hideGutters = vscode.commands.registerCommand('pmd-gutters.hideDuplicates', () => {
+		pmdGutters.hideDuplicates();
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(showGutters,hideGutters);
 }
 
 // This method is called when your extension is deactivated
