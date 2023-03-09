@@ -4,9 +4,10 @@ import * as vscode from 'vscode';
 import { CPDCache } from './data/cpd';
 import { PMDGutters } from './gutter';
 
-let data = new CPDCache("/home/mike/projects/pmd-cpd-gutters/pmd-gutters/examples/cpd/cpd.xml");
+
 
 export function activate(context: vscode.ExtensionContext) {
+	let data = new CPDCache();
 	let pmdGutters = new PMDGutters(data,context);
 	let showGutters = vscode.commands.registerCommand('pmd-gutters.showDuplicates', () => {
 		pmdGutters.showDuplicates();

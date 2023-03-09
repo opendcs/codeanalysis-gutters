@@ -31,6 +31,9 @@ export class PMDGutters {
     public constructor(duplicates: CPDCache, context:vscode.ExtensionContext) {
         this.duplicates=duplicates;
         this.duplicateState = State.renderOff;
+        var onChange = () => this.renderGutters();
+
+        this.duplicates.onChange( onChange.bind(this) ) ;
     }
 
     public showDuplicates() {
@@ -60,11 +63,10 @@ export class PMDGutters {
         }
     
         if (vscode.workspace.workspaceFolders !== undefined) {
-            let workspaceDir = vscode.workspace.workspaceFolders[0].uri.path+"/";
             let editor = vscode.window.activeTextEditor;
             if ( editor !== null && editor !== undefined) {
-                var openFile = editor?.document.fileName.replace(workspaceDir,"");
-                let dups = this.duplicates.getData().get(openFile);
+                var openFile = editor?.document.fileName;
+                let dups = this.duplicates.getData(vscode.Uri.file(openFile));
                 var minor = new Array<vscode.DecorationOptions>();
                 var major = new Array<vscode.DecorationOptions>();
                 var critical = new Array<vscode.DecorationOptions>();
