@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CPDCache } from './data/cpd';
+import { CPDCache } from './data/cpd/cache';
 
 enum State {
     renderOn,
