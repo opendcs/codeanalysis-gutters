@@ -2,7 +2,7 @@
   "name": "codeanalysis-gutters",
   "displayName": "codeanalysis-gutters",
   "description": "Render information from various code analysis tools. Starting with PMD-CPD and Spotbugs.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "git@github.com:MikeNeilson/codeanalysis-gutters.git"
@@ -39,13 +39,28 @@
       }
     ],
     "views": {
-      "explorer": [
+      "code-analysis": [
         {
           "id": "cpd.DuplicateCode",
           "name": "Duplicate Code"
         }
       ]
     },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "code-analysis",
+          "title": "Code Analysis",
+          "icon": "media/test.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "cpd.DuplicateCode",
+        "contents": "No duplicate files found or not processed yet."
+      }
+    ],
     "menus": {
       "commandPalette": [
         {
