@@ -114,11 +114,11 @@ export class CPDCache {
         var duplicates = this.duplicateData.get(file.toString());
         if( duplicates !== null && duplicates !== undefined) {
             return duplicates;
-        } else {
-            /* try to match with shorter and shorter */
-
         }
-
         return [];
+    }
+
+    public getKnownFiles(): Array<vscode.Uri> {
+        return Array.from(this.duplicateData.keys(),(v,k) => expandedUri(v) );
     }
 }

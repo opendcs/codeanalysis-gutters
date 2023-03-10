@@ -20,13 +20,48 @@
     "commands": [
       {
         "command": "codeanalysis-gutters.pmd.showDuplicates",
-        "title": "Code Analysis-PMD: Show Duplicate Code"
+        "title": "Show Duplicate Code",
+        "category": "Code Analysis-PMD"
       },
       {
         "command": "codeanalysis-gutters.pmd.hideDuplicates",
-        "title": "Code Analysis-PMD: Hide Duplicate Code Indicators"
+        "title": "Hide Duplicate Code Indicators",
+        "category": "Code Analysis-PMD"
+      },
+      {
+        "command": "codeanalysis-gutters.pmd.refreshDuplicates",
+        "title": "Code Analysis-PMD: Refresh Duplicate Tree",
+        "category": "Code Analysis-PMD"
+      },
+      {
+        "command": "codeanalysis-gutters.pmd.editFromTree",
+        "title": "Edit"        
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cpd.DuplicateCode",
+          "name": "Duplicate Code"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command":"codeanalysis-gutters.pmd.editFromTree",
+          "when": "false"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "codeanalysis-gutters.pmd.editFromTree",
+          "title": "edit",
+          "when": "view == cpd.DuplicateCode && viewItem == DuplicationItem",
+          "group": "inline"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

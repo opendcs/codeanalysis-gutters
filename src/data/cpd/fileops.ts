@@ -76,11 +76,14 @@ export class DuplicationData {
  * @returns Uri to the file with workspace dir added if needed.
  */
 export function expandedUri(file: string): vscode.Uri {
+    if( file.match("[a-zA-Z]*://.*") ) {
+        return vscode.Uri.parse(file);
+    }
     var uri = vscode.Uri.file(file);
     /** If the file is a relative assume it's from the workspace root
          * and tweak as required
          */
-    if (!file.startsWith("/") && vscode.workspace.workspaceFolders !== undefined) {
+    if (!file.startsWith("/") && !file.startsWith("file://") && vscode.workspace.workspaceFolders !== undefined) {
         const workspaceDir = vscode.workspace.workspaceFolders[0].uri;
         uri = vscode.Uri.file(workspaceDir.path + "/" + file);
     }
