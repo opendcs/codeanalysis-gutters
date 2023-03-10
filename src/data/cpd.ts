@@ -2,6 +2,10 @@ import * as xml from 'xml2js';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
+/**
+ * Maintains information necessary to provide
+ * appropriate link to duplicate code in other files.
+ */
 export class OtherFile {
     public readonly file: vscode.Uri;
     public readonly line: number;
@@ -11,10 +15,19 @@ export class OtherFile {
         this.line = line;
     }
 
+    /**
+     * Same file link format that would be seen in the terminal.
+     * @returns text for the [] portions of the Markdown link.
+     */
     public linkText(): string {
         return this.file.toString() + ":" + this.line.toFixed(0);
     }
 
+    /**
+     * File link in a format that vscode will open and move to the 
+     * correct line.
+     * @returns proper link with anchor.
+     */
     public link(): string {
         return this.file.toString() + "#" + this.line.toFixed(0);
     }
@@ -40,6 +53,7 @@ export class DuplicationData {
     }
 
     /**
+     * Sets up the hover text and file links.
      * @returns DecorationOptions containing the ranges and links to the other files
      */
     public getDecorationInformation() {
@@ -55,6 +69,10 @@ export class DuplicationData {
     }
 }
 
+/**
+ * function called when the file hunter finds a file.
+ * Used to register additional actions.
+ */
 type FileCallback = (file: vscode.Uri) => void;
 
 /**
@@ -132,6 +150,10 @@ export class CPDCache {
         });
     }
 
+    /**
+     * Actually read the data
+     * @param file uri to the cpd xml file to process
+     */
     private readData(file: vscode.Uri) {
         var self = this;
 
@@ -182,14 +204,26 @@ export class CPDCache {
         });
     }
 
+    /**
+     * Rerender decorations if change of duplication data.
+     */
     private fireChange() {
         this.callbacks.forEach( (cb) => cb() );
     }
 
+    /**
+     * Register function to be called on any change.
+     * @param cb 
+     */
     public onChange(cb: () => void) {
         this.callbacks.push(cb);
     }
 
+    /**
+     * Retrieve Duplication data for a given file.
+     * @param file The file we want data for
+     * @returns All Duplicate data for the given file, or []
+     */
     public getData(file: vscode.Uri) : DuplicationData[] {
         var duplicates = this.duplicateData.get(file.toString());
         if( duplicates !== null && duplicates !== undefined) {

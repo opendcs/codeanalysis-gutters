@@ -6,7 +6,10 @@ enum State {
     renderOff
 }
 
-export class PMDGutters {
+/**
+ * Handles rendering PMD-CMD duplicate data
+ */
+export class CPDGutters {
     private duplicates: CPDCache;
     private duplicateState: State;
 
@@ -61,7 +64,7 @@ export class PMDGutters {
             editor?.setDecorations(this.decTypeMinor,[]);
             return;
         }
-    
+
         if (vscode.workspace.workspaceFolders !== undefined) {
             let editor = vscode.window.activeTextEditor;
             if ( editor !== null && editor !== undefined) {
@@ -70,7 +73,7 @@ export class PMDGutters {
                 var minor = new Array<vscode.DecorationOptions>();
                 var major = new Array<vscode.DecorationOptions>();
                 var critical = new Array<vscode.DecorationOptions>();
-    
+
                 dups?.forEach((dup) => {
                     if (dup.numTokens < 300) {
                         minor.push(dup.getDecorationInformation());
@@ -80,7 +83,7 @@ export class PMDGutters {
                         critical.push(dup.getDecorationInformation());
                     }
                 });
-    
+
                 editor?.setDecorations(this.decTypeMinor,minor);
                 editor?.setDecorations(this.decTypeMajor,major);
                 editor?.setDecorations(this.decTypeCritical,critical);

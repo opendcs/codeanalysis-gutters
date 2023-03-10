@@ -1,7 +1,7 @@
 {
-  "name": "pmd-gutters",
-  "displayName": "pmd-gutters",
-  "description": "render information about PMD Bugs and CPD duplication references inline with code.",
+  "name": "codeanalysis-gutters",
+  "displayName": "codeanalysis-gutters",
+  "description": "Render information from various code analysis tools. Starting with PMD-CPD and spotbugs.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"
@@ -14,14 +14,13 @@
   "contributes": {
     "commands": [
       {
-        "command": "pmd-gutters.showDuplicates",
-        "title": "Show Duplicate Code"
+        "command": "codeanalysis-gutters.pmd.showDuplicates",
+        "title": "Code Analysis-PMD: Show Duplicate Code"
       },
       {
-        "command": "pmd-gutters.hideDuplicates",
-        "title": "Hide Duplicate Code Indicators"
+        "command": "codeanalysis-gutters.pmd.hideDuplicates",
+        "title": "Code Analysis-PMD: Hide Duplicate Code Indicators"
       }
-      
     ]
   },
   "scripts": {
