@@ -16,19 +16,25 @@ export class CPDGutters {
     private decTypeCritical = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "red"
+        backgroundColor: "red",
+        overviewRulerColor: "red",
+        overviewRulerLane: vscode.OverviewRulerLane.Full
     });
 
     private decTypeMajor = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "yellow"
+        backgroundColor: "yellow",
+        overviewRulerColor: "yellow",
+        overviewRulerLane: vscode.OverviewRulerLane.Full
     });
 
     private decTypeMinor = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "blue"
+        backgroundColor: "blue",
+        overviewRulerColor: "blue",
+        overviewRulerLane: vscode.OverviewRulerLane.Full
     });
 
     public constructor(duplicates: CPDCache, context:vscode.ExtensionContext) {
