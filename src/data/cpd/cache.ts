@@ -1,6 +1,6 @@
 import * as xml from 'xml2js';
 import * as vscode from 'vscode';
-import { CPDFileHunter } from './hunter';
+import { FileHunter } from '../hunter';
 import { DuplicationData, expandedUri, OtherFile } from './fileops';
 
 /**
@@ -9,13 +9,21 @@ import { DuplicationData, expandedUri, OtherFile } from './fileops';
 export class CPDCache {
     private duplicateData: Map<string,Array<DuplicationData>>;
     private callbacks = new Array<()=>void>();
-    private fileHunter: CPDFileHunter;
+    private fileHunter: FileHunter;
 
     public constructor() {
         this.duplicateData = new Map<string,Array<DuplicationData>>();
 
         var self = this;
-        this.fileHunter = new CPDFileHunter((file) => {
+        this.fileHunter = new FileHunter(
+            "**/*.xml",
+            async (file) => {
+                const data = await vscode.workspace
+                    .fs
+                    .readFile(file);
+                return data.toString().includes("<pmd-cpd>");
+            },
+            (file) => {
             console.log("Registering file watchers");
             this.readData(file);
             var watcher = vscode.workspace.createFileSystemWatcher(
