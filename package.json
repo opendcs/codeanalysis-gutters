@@ -35,7 +35,8 @@
       },
       {
         "command": "codeanalysis-gutters.pmd.editFromTree",
-        "title": "Edit"        
+        "title": "Edit",
+        "icon": "$(edit)"
       }
     ],
     "views": {
@@ -51,7 +52,7 @@
         {
           "id": "code-analysis",
           "title": "Code Analysis",
-          "icon": "media/test.svg"
+          "icon": "$(bug)"
         }
       ]
     },
@@ -66,14 +67,6 @@
         {
           "command":"codeanalysis-gutters.pmd.editFromTree",
           "when": "false"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "codeanalysis-gutters.pmd.editFromTree",
-          "title": "edit",
-          "when": "view == cpd.DuplicateCode && viewItem == DuplicationItem",
-          "group": "inline"
         }
       ]
     }

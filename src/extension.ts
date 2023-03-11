@@ -10,7 +10,7 @@ import { CPDGutters } from './gutter';
 export function activate(context: vscode.ExtensionContext) {
 	let data = new CPDCache();
 	let cpdGutters = new CPDGutters(data,context);
-	let duplicateProvider = new DuplicateCodeProvider(data)
+	let duplicateProvider = new DuplicateCodeProvider(data);
 
 	let showCPDGutters = vscode.commands.registerCommand('codeanalysis-gutters.pmd.showDuplicates', () => {
 		cpdGutters.showDuplicates();
@@ -29,7 +29,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(showCPDGutters,hideCPDGutters,refreshCPDTree,editTreeSelection);
 
-	
 	vscode.window.registerTreeDataProvider('cpd.DuplicateCode',duplicateProvider);
 }
 
