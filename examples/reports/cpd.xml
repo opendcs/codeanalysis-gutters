@@ -3,10 +3,10 @@
    <duplication lines="62" tokens="284">
       <file begintoken="59517" column="2" endcolumn="8" endline="889" endtoken="59800"
             line="828"
-            path="/src/main/java/decodes/cwms/CwmsConsumer.java"/>
+            path="src/main/java/decodes/cwms/CwmsConsumer.java"/>
       <file begintoken="1403615" column="2" endcolumn="8" endline="711" endtoken="1403898"
             line="652"
-            path="/src/main/java/opendcs/opentsdb/OpenTsdbConsumer.java"/>
+            path="src/main/java/opendcs/opentsdb/OpenTsdbConsumer.java"/>
       <codefragment><![CDATA[	}
 
 	
@@ -73,10 +73,10 @@
    <duplication lines="54" tokens="283">
       <file begintoken="266091" column="3" endcolumn="5" endline="131" endtoken="266373"
             line="78"
-            path="/src/main/java/decodes/dbeditor/PlatformSelectDialog.java"/>
+            path="src/main/java/decodes/dbeditor/PlatformSelectDialog.java"/>
       <file begintoken="266629" column="3" endcolumn="5" endline="109" endtoken="266911"
             line="56"
-            path="/src/main/java/decodes/dbeditor/PlatformSelectDialogforSubset.java"/>
+            path="src/main/java/decodes/dbeditor/PlatformSelectDialogforSubset.java"/>
       <codefragment><![CDATA[		plat = null;
         try 
 		{
@@ -135,10 +135,10 @@
    <duplication lines="83" tokens="277">
       <file begintoken="1098260" column="6" endcolumn="8" endline="637" endtoken="1098536"
             line="555"
-            path="/src/main/java/lrgs/drgsrecv/DrgsRecvMsgThread.java"/>
+            path="src/main/java/lrgs/drgsrecv/DrgsRecvMsgThread.java"/>
       <file begintoken="1102749" column="6" endcolumn="8" endline="409" endtoken="1103025"
             line="325"
-            path="/src/main/java/lrgs/drgsrecv/DrgsStats.java"/>
+            path="src/main/java/lrgs/drgsrecv/DrgsStats.java"/>
       <codefragment><![CDATA[					return true;
 				}
 			}

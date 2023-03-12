@@ -30,7 +30,7 @@ export class CPDConfig {
         public readonly minor: number,
         public readonly major: number
     ) {
-        if(minor < major) {
+        if(minor >= major) {
             throw new Error("Thresholds must be the following condition: minor < major");
         }
     }    
