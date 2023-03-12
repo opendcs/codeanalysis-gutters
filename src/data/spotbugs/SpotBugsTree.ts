@@ -3,8 +3,59 @@ import { SpotBugsCache} from './cache';
 import { Bug,FileReport } from './types';
 
 interface SpotBugsNode {
+    /**
+     * Provide Children of this node, if any
+     */
     children(): SpotBugsNode[] | undefined;
+
+    /**
+     * Provide the appropriate tree item data.
+     */
     item(): vscode.TreeItem | Thenable<vscode.TreeItem>;
+}
+
+class SpotBugsBugNode implements SpotBugsNode {
+    public constructor(
+        public readonly bug: Bug
+    ) {}
+
+    children(): SpotBugsNode[] | undefined {
+        return undefined;
+    }
+    item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        return {
+            resourceUri: this.bug.sourceFile,            
+            description: `${this.bug.startLine}: Category ${this.bug.category}, Rank ${this.bug.rank}, Priority ${this.bug.priority}`,
+            tooltip: `${this.bug.longMessage}`,
+            command: {
+                command: 'vscode.open',
+                arguments: [this.bug.sourceFile,{selection:new vscode.Range(this.bug.startLine,0,this.bug.endLine,0)}],
+                title: 'Open File'
+            },
+            collapsibleState: vscode.TreeItemCollapsibleState.None
+        };
+    }
+
+}
+
+class SpotBugsReportNode implements SpotBugsNode {
+    public constructor(
+        private readonly reportSource: vscode.Uri,
+        private readonly report: FileReport
+    ) {}
+
+    children(): SpotBugsNode[] | undefined {
+        return this.report.bugs.map((bug)=>new SpotBugsBugNode(bug));
+    }
+
+    item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        return {
+            resourceUri: this.reportSource,
+            tooltip: this.reportSource.toString(),
+            description: `${this.report.bugs.length} bugs`,
+            collapsibleState: vscode.TreeItemCollapsibleState.Collapsed
+        };
+    }
 }
 
 class SpotBugsFileNode implements SpotBugsNode {
@@ -14,7 +65,12 @@ class SpotBugsFileNode implements SpotBugsNode {
     ) {}
 
     children(): SpotBugsNode[] | undefined {
-        return [];
+        var bugs = this.cache.getBugs(this.file);
+        var items = new Array<SpotBugsReportNode>();
+        bugs.forEach((rep,source) => {
+            items.push(new SpotBugsReportNode(vscode.Uri.parse(source),rep));
+        });
+        return items;
     }
     item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
         return {
@@ -35,7 +91,7 @@ export class SpotBugsTreeProvider implements vscode.TreeDataProvider<SpotBugsNod
     private bugCache: SpotBugsCache;
 
     public constructor(bugsReports: SpotBugsCache) {
-        this.bugCache = bugsReports
+        this.bugCache = bugsReports;
         this.bugCache.onChange( () => {
             this.refresh();
         });

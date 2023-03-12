@@ -8,12 +8,12 @@ import { SpotBugsFileProcessor } from "./processor";
 
 
 export class SpotBugsCache {
-    private bugs: Map<string,Array<FileReport>>;
+    private reports: Map<string,Map<string,FileReport>>;
     private callbacks = new Array<()=>void>();
     private fileHunter: FileHunter;
 
     public constructor() {
-        this.bugs = new Map<string,Array<FileReport>>();
+        this.reports = new Map<string,Map<string,FileReport>>();
 
         var self = this;
         this.fileHunter = new FileHunter(
@@ -31,15 +31,15 @@ export class SpotBugsCache {
                 new vscode.RelativePattern(file,'*')
             );
             watcher.onDidChange(() => {
-                self.bugs.delete(file.toString());
+                self.reports.delete(file.toString());
                 self.readData(file);
             });
             watcher.onDidCreate(() => {
-                self.bugs.delete(file.toString());
+                self.reports.delete(file.toString());
                 self.readData(file);
             });
             watcher.onDidDelete( () => {
-                self.bugs.delete(file.toString());
+                self.reports.delete(file.toString());
                 self.fireChange();
             });
         });
@@ -53,14 +53,12 @@ export class SpotBugsCache {
         var self = this;
         SpotBugsFileProcessor.read(file).then(updatedReports => {
             updatedReports.forEach(newReport=> {
-                var reports = self.bugs.get(newReport.file.path);
+                var reports = self.reports.get(newReport.file.toString());
                 if (!reports) {
-                    self.bugs.set(newReport.file.path,new Array<FileReport>());
-                    reports = self.bugs.get(newReport.file.path);
-                } 
-                var filteredReports = reports?.filter((report) => report.bugSource.path !== file.path)
-                                            .concat(updatedReports);
-                self.bugs.set(newReport.file.path,filteredReports|| []);
+                    self.reports.set(newReport.file.toString(),new Map<string,FileReport>());
+                    reports = self.reports.get(newReport.file.toString());
+                }                 
+                reports?.set(newReport.bugSource.path,newReport);
             });
             this.fireChange();
         });
@@ -86,12 +84,12 @@ export class SpotBugsCache {
      * @param file The file we want data for
      * @returns All Duplicate data for the given file, or []
      */
-    public getBugs(file: vscode.Uri) : FileReport[] {
-        var bugs = this.bugs.get(file.toString());
-        return bugs || [];
+    public getBugs(file: vscode.Uri) : Map<string,FileReport> {
+        var reportsForFile = this.reports.get(file.toString());
+        return reportsForFile || new Map<string,FileReport>();
     }
 
     public getKnownFiles(): Array<vscode.Uri> {
-        return Array.from(this.bugs.keys(),(v,k) => expandedUri(v) );
+        return Array.from(this.reports.keys(),(v,k) => expandedUri(v) );
     }
 }
