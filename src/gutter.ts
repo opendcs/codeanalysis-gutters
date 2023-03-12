@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { CodeAnalysisConfig, CPDConfig } from './config';
 import { CPDCache } from './data/cpd/cache';
 import { SpotBugsCache } from './data/spotbugs/cache';
 
@@ -14,34 +15,13 @@ export class CPDGutters {
     private duplicates: CPDCache;
     private spotbugsBugs: SpotBugsCache;
     private duplicateState: State;
+    private config: CodeAnalysisConfig;
 
-    private decTypeCritical = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "red",
-        overviewRulerColor: "red",
-        overviewRulerLane: vscode.OverviewRulerLane.Full
-    });
-
-    private decTypeMajor = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "yellow",
-        overviewRulerColor: "yellow",
-        overviewRulerLane: vscode.OverviewRulerLane.Full
-    });
-
-    private decTypeMinor = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "blue",
-        overviewRulerColor: "blue",
-        overviewRulerLane: vscode.OverviewRulerLane.Full
-    });
-
-    public constructor(duplicates: CPDCache, spotbugs: SpotBugsCache, context:vscode.ExtensionContext) {
+    
+    public constructor(duplicates: CPDCache, spotbugs: SpotBugsCache, config: CodeAnalysisConfig,context:vscode.ExtensionContext) {
         this.duplicates=duplicates;
         this.spotbugsBugs = spotbugs;
+        this.config = config;
         this.duplicateState = State.renderOff;
         var onDupsChange = () => this.renderDuplicateGutters();
         var onSpotBugsChange = () => this.renderSpotbugsGutters();
@@ -70,9 +50,9 @@ export class CPDGutters {
     private renderDuplicateGutters() {
         if (this.duplicateState === State.renderOff) {
             let editor = vscode.window.activeTextEditor;
-            editor?.setDecorations(this.decTypeCritical,[]);
-            editor?.setDecorations(this.decTypeMajor,[]);
-            editor?.setDecorations(this.decTypeMinor,[]);
+            editor?.setDecorations(this.config.cpdConfig.decTypeCritical,[]);
+            editor?.setDecorations(this.config.cpdConfig.decTypeMajor,[]);
+            editor?.setDecorations(this.config.cpdConfig.decTypeMinor,[]);
             return;
         }
 
@@ -86,18 +66,18 @@ export class CPDGutters {
                 var critical = new Array<vscode.DecorationOptions>();
 
                 dups?.forEach((dup) => {
-                    if (dup.numTokens < 300) {
+                    if (dup.numTokens < this.config.cpdConfig.minor) {
                         minor.push(dup.getDecorationInformation());
-                    } else if (dup.numTokens < 700) {
+                    } else if (dup.numTokens < this.config.cpdConfig.major) {
                         major.push(dup.getDecorationInformation());
                     } else {
                         critical.push(dup.getDecorationInformation());
                     }
                 });
 
-                editor?.setDecorations(this.decTypeMinor,minor);
-                editor?.setDecorations(this.decTypeMajor,major);
-                editor?.setDecorations(this.decTypeCritical,critical);
+                editor?.setDecorations(this.config.cpdConfig.decTypeMinor,minor);
+                editor?.setDecorations(this.config.cpdConfig.decTypeMajor,major);
+                editor?.setDecorations(this.config.cpdConfig.decTypeCritical,critical);
             }
         }
     }
