@@ -3,14 +3,18 @@
 import * as vscode from 'vscode';
 import { CPDCache } from './data/cpd/cache';
 import { DuplicateCodeProvider } from './data/cpd/treedata';
+import { SpotBugsCache } from './data/spotbugs/cache';
+import { SpotBugsTreeProvider } from './data/spotbugs/SpotBugsTree';
 import { CPDGutters } from './gutter';
 
 
 
 export function activate(context: vscode.ExtensionContext) {
+	let spotbugsData = new SpotBugsCache();
 	let data = new CPDCache();
-	let cpdGutters = new CPDGutters(data,context);
+	let cpdGutters = new CPDGutters(data,spotbugsData,context);
 	let duplicateProvider = new DuplicateCodeProvider(data);
+	let spotbugsProvider = new SpotBugsTreeProvider(spotbugsData);
 
 	let showCPDGutters = vscode.commands.registerCommand('codeanalysis-gutters.pmd.showDuplicates', () => {
 		cpdGutters.showDuplicates();
@@ -30,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(showCPDGutters,hideCPDGutters,refreshCPDTree,editTreeSelection);
 
 	vscode.window.registerTreeDataProvider('cpd.DuplicateCode',duplicateProvider);
+	vscode.window.registerTreeDataProvider('spotbugs.Bugs',spotbugsProvider);
 }
 
 // This method is called when your extension is deactivated

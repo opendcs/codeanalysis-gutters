@@ -51,8 +51,9 @@ export class CPDCache {
     private readData(file: vscode.Uri) {
         var self = this;
 
-        vscode.workspace.fs.readFile(file).then((data) => {
-            xml.parseString(data, (err, cpdData) => {
+        vscode.workspace.fs.readFile(file)
+            .then((data) => {
+                xml.parseString(data, (err, cpdData) => {
                 if (err) {
                     throw err;
                 }
@@ -95,6 +96,8 @@ export class CPDCache {
                 });
                 self.fireChange();
             });
+        },(reason) => {
+            console.log("Could not read duplication data from " + file + " because " + reason);
         });
     }
 

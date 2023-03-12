@@ -44,6 +44,10 @@
         {
           "id": "cpd.DuplicateCode",
           "name": "Duplicate Code"
+        },
+        {
+          "id": "spotbugs.Bugs",
+          "name": "Spotbugs"
         }
       ]
     },
@@ -60,6 +64,10 @@
       {
         "view": "cpd.DuplicateCode",
         "contents": "No duplicate files found or not processed yet."
+      },
+      {
+        "view": "spotbugs.Bugs",
+        "contents": "No Spotbugs files found or not processed yet."
       }
     ],
     "menus": {

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { CPDCache } from './data/cpd/cache';
+import { SpotBugsCache } from './data/spotbugs/cache';
 
 enum State {
     renderOn,
@@ -11,6 +12,7 @@ enum State {
  */
 export class CPDGutters {
     private duplicates: CPDCache;
+    private spotbugsBugs: SpotBugsCache;
     private duplicateState: State;
 
     private decTypeCritical = vscode.window.createTextEditorDecorationType({
@@ -37,12 +39,15 @@ export class CPDGutters {
         overviewRulerLane: vscode.OverviewRulerLane.Full
     });
 
-    public constructor(duplicates: CPDCache, context:vscode.ExtensionContext) {
+    public constructor(duplicates: CPDCache, spotbugs: SpotBugsCache, context:vscode.ExtensionContext) {
         this.duplicates=duplicates;
+        this.spotbugsBugs = spotbugs;
         this.duplicateState = State.renderOff;
-        var onChange = () => this.renderGutters();
+        var onDupsChange = () => this.renderDuplicateGutters();
+        var onSpotBugsChange = () => this.renderSpotbugsGutters();
 
-        this.duplicates.onChange( onChange.bind(this) ) ;
+        this.duplicates.onChange(onDupsChange.bind(this));
+        this.spotbugsBugs.onChange(onSpotBugsChange.bind(this));
     }
 
     public showDuplicates() {
@@ -50,19 +55,19 @@ export class CPDGutters {
         var self = this;
         vscode.window.onDidChangeActiveTextEditor((editor) => {
 			if (editor !== undefined) {
-				self.renderGutters();
+				self.renderDuplicateGutters();
 			}
 		});
-        this.renderGutters();
+        this.renderDuplicateGutters();
     }
 
     public hideDuplicates() {
         this.duplicateState = State.renderOff;
         vscode.window.onDidChangeActiveTextEditor((e)=>{});
-        this.renderGutters();
+        this.renderDuplicateGutters();
     }
 
-    private renderGutters() {
+    private renderDuplicateGutters() {
         if (this.duplicateState === State.renderOff) {
             let editor = vscode.window.activeTextEditor;
             editor?.setDecorations(this.decTypeCritical,[]);
@@ -95,5 +100,9 @@ export class CPDGutters {
                 editor?.setDecorations(this.decTypeCritical,critical);
             }
         }
+    }
+
+    renderSpotbugsGutters() {
+        console.log("Would have rendered bugs");
     }
 }

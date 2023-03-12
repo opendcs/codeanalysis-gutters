@@ -2,21 +2,12 @@ import { expandedUri } from "../cpd/fileops";
 import { FileHunter } from "../hunter";
 import * as vscode from 'vscode';
 import * as xml from 'xml2js';
+import { FileReport } from "./types";
+import { SpotBugsFileProcessor } from "./processor";
 
-export class Bug {
 
-}
 
-export class FileReport {
-    public constructor(
-        public readonly file: vscode.Uri,
-        public readonly bugs: Bug[]    
-    ) {
-
-    }
-}
-
-export class CPDCache {
+export class SpotBugsCache {
     private bugs: Map<string,Array<FileReport>>;
     private callbacks = new Array<()=>void>();
     private fileHunter: FileHunter;
@@ -56,57 +47,22 @@ export class CPDCache {
 
     /**
      * Actually read the data
-     * @param file uri to the cpd xml file to process
+     * @param file uri to the spotbugs xml file to process
      */
     private readData(file: vscode.Uri) {
         var self = this;
-
-        vscode.workspace.fs.readFile(file).then((data) => {
-            xml.parseString(data, (err, bugData) => {
-                if (err) {
-                    throw err;
-                }
-                /*
-                var duplicates = bugData["pmd-cpd"]["duplication"];
-                Object.keys(duplicates).forEach( (value:string,idx: number) => {
-                    var tokensDuplicate = Number.parseInt(duplicates[idx].$.tokens);
-                    var xmlFiles = duplicates[idx]["file"];
-                    var allFiles = new Array<OtherFile>();
-                    Object.keys(xmlFiles).forEach( (value,idx) => {
-                        var xmlFile = xmlFiles[idx].$;
-                        allFiles.push(
-                            new OtherFile(
-                                expandedUri(xmlFile.path),
-                                Number.parseInt(xmlFile.line)
-                            )
-                        );
-                    });
-
-                    Object.keys(xmlFiles).forEach( (value:string, idx:number) => {
-                        var dupFile = xmlFiles[idx].$;
-                        var file = dupFile.path;
-                        var startLine = Number.parseInt(dupFile.line);
-                        var endLine = Number.parseInt(dupFile.endline);
-                        var otherFiles = new Array<OtherFile>();
-                        allFiles.forEach((path) => {
-                            if (path.file.toString() !== expandedUri(file).toString()) {
-                                otherFiles.push(path);
-                            }
-                        });
-
-                        var uri = expandedUri(file);
-                        var uriString = uri.toString();
-                        var dupElement = new DuplicationData(file,otherFiles,startLine,endLine,tokensDuplicate);
-                        if(!self.duplicateData.has(uriString)) {
-                            self.duplicateData.set(uriString,new Array<DuplicationData>());
-                        }
-                        var dupSet = self.duplicateData.get(uriString) || new Array<DuplicationData>();
-                        dupSet.push(dupElement);
-                    });
-                });
-                self.fireChange();
-                */
+        SpotBugsFileProcessor.read(file).then(updatedReports => {
+            updatedReports.forEach(newReport=> {
+                var reports = self.bugs.get(newReport.file.path);
+                if (!reports) {
+                    self.bugs.set(newReport.file.path,new Array<FileReport>());
+                    reports = self.bugs.get(newReport.file.path);
+                } 
+                var filteredReports = reports?.filter((report) => report.bugSource.path !== file.path)
+                                            .concat(updatedReports);
+                self.bugs.set(newReport.file.path,filteredReports|| []);
             });
+            this.fireChange();
         });
     }
 
@@ -131,11 +87,8 @@ export class CPDCache {
      * @returns All Duplicate data for the given file, or []
      */
     public getBugs(file: vscode.Uri) : FileReport[] {
-        var duplicates = this.bugs.get(file.toString());
-        if( duplicates !== null && duplicates !== undefined) {
-            return duplicates;
-        }
-        return [];
+        var bugs = this.bugs.get(file.toString());
+        return bugs || [];
     }
 
     public getKnownFiles(): Array<vscode.Uri> {
