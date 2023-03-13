@@ -47,27 +47,31 @@ export class CPDConfig {
 }
 
 export class SpotBugsConfig {
+    public readonly colorHigh = new vscode.ThemeColor("spotbugs.highConfidence");
+    public readonly colorNormal = new vscode.ThemeColor("spotbugs.normalConfidence");
+    public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
+
     public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "red",
-        overviewRulerColor: "red",
+        backgroundColor: this.colorHigh,
+        overviewRulerColor: this.colorHigh,
         overviewRulerLane: vscode.OverviewRulerLane.Center
     });
 
     public readonly decTypeNormal = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "yellow",
-        overviewRulerColor: "yellow",
+        backgroundColor: this.colorNormal,
+        overviewRulerColor: this.colorNormal,
         overviewRulerLane: vscode.OverviewRulerLane.Center
     });
 
     public readonly decTypeLow = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
         rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: "blue",
-        overviewRulerColor: "blue",
+        backgroundColor: this.colorLow,
+        overviewRulerColor: this.colorLow,
         overviewRulerLane: vscode.OverviewRulerLane.Center
     });
 

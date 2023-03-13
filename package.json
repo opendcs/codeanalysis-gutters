@@ -103,6 +103,30 @@
           "dark": "#f1c21b20",
           "light": "#f1c21b20"
         }
+      },
+      {
+        "id": "spotbugs.highConfidence",
+        "description": "Background highlight color to make large sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#fa4d5620",
+          "light": "#da1e2820"
+        }
+      },
+      {
+        "id": "spotbugs.normalConfidence",
+        "description": "Background highlight color to make medium sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#ff832b20",
+          "light": "#ff832b20"
+        }
+      },
+      {
+        "id": "spotbugs.lowConfidence",
+        "description": "Background highlight color to make small sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#f1c21b20",
+          "light": "#f1c21b20"
+        }
       }
     ]
   },
