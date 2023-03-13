@@ -3,11 +3,34 @@ import * as xml from 'xml2js';
 import { Bug, FileReport } from './types';
 import { expandedUri } from '../cpd/fileops';
 
+export class BugCode {
+    public constructor(
+        public readonly cweid: string,
+        public readonly description: string
+    ) {}
+}
+
+export class PatternInfo {
+    public constructor(
+        public readonly abbrev: string,
+        public readonly type: string,
+        public readonly category: string
+    ) {}
+}
+
+export class BugPattern {
+    public constructor(
+        public readonly pattern: PatternInfo,
+        public readonly details: string,
+        public readonly shortDescription: string
+    ) {}
+}
+
 export class SpotBugsFileProcessor {
     public readonly reports= Array<FileReport>();
     public static readonly bugCategories = new Map<string,string>();
-    public static readonly bugCodes = new Map<string,{}>();
-    public static readonly bugPatterns = new Map<string,{}>();
+    public static readonly bugCodes = new Map<string,BugCode>();
+    public static readonly bugPatterns = new Map<string,BugPattern>();
     private baseUrl: string;
 
     public constructor(xml: any,bugSource: vscode.Uri) {
@@ -84,13 +107,13 @@ export class SpotBugsFileProcessor {
               .forEach((_value,index)=>{
                 var pattern = collection["BugPattern"][index];
                 SpotBugsFileProcessor.bugPatterns.set(pattern.$.abbrev, {
-                    "pattern": {
-                        "abbrev": pattern.$.abbrev,
-                        "type": pattern.$.type,
-                        "category": pattern.$.category
+                    pattern: {
+                        abbrev: pattern.$.abbrev,
+                        type: pattern.$.type,
+                        category: pattern.$.category
                     },
-                    "details": pattern.Details[0],
-                    "shortDescription": pattern.ShortDescription[0]
+                    details: pattern.Details[0],
+                    shortDescription: pattern.ShortDescription[0]
                 });
               });
     }

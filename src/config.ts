@@ -36,9 +36,38 @@ export class CPDConfig {
     }    
 }
 
+export class SpotBugsConfig {
+    public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        backgroundColor: "red",
+        overviewRulerColor: "red",
+        overviewRulerLane: vscode.OverviewRulerLane.Center
+    });
+
+    public readonly decTypeNormal = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        backgroundColor: "yellow",
+        overviewRulerColor: "yellow",
+        overviewRulerLane: vscode.OverviewRulerLane.Center
+    });
+
+    public readonly decTypeLow = vscode.window.createTextEditorDecorationType({
+        isWholeLine: true,
+        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        backgroundColor: "blue",
+        overviewRulerColor: "blue",
+        overviewRulerLane: vscode.OverviewRulerLane.Center
+    });
+
+    public constructor() {}
+}
+
 
 export class CodeAnalysisConfig {
     public readonly cpdConfig = new CPDConfig(300,700);
+    public readonly spotbugsConfig = new SpotBugsConfig();
 
     public constructor() {
 

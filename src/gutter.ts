@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { CodeAnalysisConfig, CPDConfig } from './config';
 import { CPDCache } from './data/cpd/cache';
 import { SpotBugsCache } from './data/spotbugs/cache';
+import { Bug } from './data/spotbugs/types';
 
 enum State {
     renderOn,
@@ -15,6 +16,7 @@ export class CPDGutters {
     private duplicates: CPDCache;
     private spotbugsBugs: SpotBugsCache;
     private duplicateState: State;
+    private spotbugsState: State;
     private config: CodeAnalysisConfig;
 
     
@@ -23,6 +25,7 @@ export class CPDGutters {
         this.spotbugsBugs = spotbugs;
         this.config = config;
         this.duplicateState = State.renderOff;
+        this.spotbugsState = State.renderOff;
         var onDupsChange = () => this.renderDuplicateGutters();
         var onSpotBugsChange = () => this.renderSpotbugsGutters();
 
@@ -47,9 +50,26 @@ export class CPDGutters {
         this.renderDuplicateGutters();
     }
 
+    public showSpotBugs() {
+        this.spotbugsState = State.renderOn;
+        var self = this;
+        vscode.window.onDidChangeActiveTextEditor((editor)=> {
+            if(editor) {
+                self.renderSpotbugsGutters();
+            }
+        });
+        this.renderSpotbugsGutters();
+    }
+
+    public hideSpotBugs() {
+        this.spotbugsState = State.renderOff;
+        vscode.window.onDidChangeActiveTextEditor((editor)=>{});
+        this.renderSpotbugsGutters();
+    }
+
     private renderDuplicateGutters() {
+        const editor = vscode.window.activeTextEditor;
         if (this.duplicateState === State.renderOff) {
-            let editor = vscode.window.activeTextEditor;
             editor?.setDecorations(this.config.cpdConfig.decTypeCritical,[]);
             editor?.setDecorations(this.config.cpdConfig.decTypeMajor,[]);
             editor?.setDecorations(this.config.cpdConfig.decTypeMinor,[]);
@@ -57,10 +77,9 @@ export class CPDGutters {
         }
 
         if (vscode.workspace.workspaceFolders !== undefined) {
-            let editor = vscode.window.activeTextEditor;
             if ( editor !== null && editor !== undefined) {
-                var openFile = editor?.document.fileName;
-                let dups = this.duplicates.getData(vscode.Uri.file(openFile));
+                const openFile = editor.document.fileName;
+                const dups = this.duplicates.getData(vscode.Uri.file(openFile));
                 var minor = new Array<vscode.DecorationOptions>();
                 var major = new Array<vscode.DecorationOptions>();
                 var critical = new Array<vscode.DecorationOptions>();
@@ -83,6 +102,38 @@ export class CPDGutters {
     }
 
     renderSpotbugsGutters() {
-        console.log("Would have rendered bugs");
+        const editor = vscode.window.activeTextEditor;
+        if (this.spotbugsState === State.renderOff) {
+            editor?.setDecorations(this.config.cpdConfig.decTypeCritical,[]);
+            editor?.setDecorations(this.config.cpdConfig.decTypeMajor,[]);
+            editor?.setDecorations(this.config.cpdConfig.decTypeMinor,[]);
+            return;
+        }
+
+        if (vscode.workspace.workspaceFolders !== undefined) {
+            if (editor) {
+                const openFile = editor.document.fileName;
+                var high = new Array<vscode.DecorationOptions>();
+                var normal = new Array<vscode.DecorationOptions>();
+                var low = new Array<vscode.DecorationOptions>();
+
+                const bugs = this.spotbugsBugs.getBugs(vscode.Uri.file(openFile));
+                bugs?.forEach((report)=>{
+                    report.bugs.forEach(bug=>{
+                        if(bug.priority === 1) {
+                            high.push(bug.getDecorationInfo());
+                        } else if(bug.priority === 2) {
+                            normal.push(bug.getDecorationInfo());                            
+                        } else {
+                            low.push(bug.getDecorationInfo());
+                        }
+                    });
+                });
+
+                editor?.setDecorations(this.config.spotbugsConfig.decTypeHigh,high);
+                editor?.setDecorations(this.config.spotbugsConfig.decTypeNormal,normal);
+                editor?.setDecorations(this.config.spotbugsConfig.decTypeLow,low);
+            }
+        }
     }
 }

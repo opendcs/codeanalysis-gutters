@@ -32,11 +32,20 @@
         "command": "codeanalysis-gutters.pmd.refreshDuplicates",
         "title": "Code Analysis-PMD: Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
+      },{
+        "command": "codeanalysis-gutters.spotbugs.showBugs",
+        "title": "Show Spotbugs data",
+        "category": "Code Analysis-PMD"
       },
       {
-        "command": "codeanalysis-gutters.pmd.editFromTree",
-        "title": "Edit",
-        "icon": "$(edit)"
+        "command": "codeanalysis-gutters.spotbugs.hideBugs",
+        "title": "Hide Spotbugs Data",
+        "category": "Code Analysis-PMD"
+      },
+      {
+        "command": "codeanalysis-gutters.spotbugs.refreshBugs",
+        "title": "Code Analysis-PMD: Refresh Spotbugs",
+        "category": "Code Analysis-PMD"
       }
     ],
     "views": {
@@ -69,15 +78,7 @@
         "view": "spotbugs.Bugs",
         "contents": "No Spotbugs files found or not processed yet."
       }
-    ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command":"codeanalysis-gutters.pmd.editFromTree",
-          "when": "false"
-        }
-      ]
-    }
+    ]    
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

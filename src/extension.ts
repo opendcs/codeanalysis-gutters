@@ -21,13 +21,27 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	let hideCPDGutters = vscode.commands.registerCommand('codeanalysis-gutters.pmd.hideDuplicates', () => {
 		cpdGutters.hideDuplicates();
-	});
+	});let showSpotBugsGutters = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.showBugs', () => {
+        cpdGutters.showSpotBugs();
+    });
+    let hideSpotBugsGutters = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.hideBugs', () => {
+        cpdGutters.hideSpotBugs();
+    });
+    let refreshSpotbugsTree = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.refreshBugs', () => {
+        spotbugsProvider.refresh();
+    });
 
 	let refreshCPDTree = vscode.commands.registerCommand('codeanalysis-gutters.pmd.refreshDuplicates', () => {
 		duplicateProvider.refresh();
 	});
 
-	context.subscriptions.push(showCPDGutters,hideCPDGutters,refreshCPDTree);
+	context.subscriptions.push(showCPDGutters,
+		hideCPDGutters,
+		refreshCPDTree,
+		showSpotBugsGutters,
+		hideSpotBugsGutters,
+		refreshSpotbugsTree,
+		);
 
 	vscode.window.registerTreeDataProvider('cpd.DuplicateCode',duplicateProvider);
 	vscode.window.registerTreeDataProvider('spotbugs.Bugs',spotbugsProvider);
