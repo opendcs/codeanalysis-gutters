@@ -112,7 +112,7 @@ export class SpotBugsFileProcessor {
                         type: pattern.$.type,
                         category: pattern.$.category
                     },
-                    details: pattern.Details[0],
+                    details: new String(pattern.Details[0]).replace(/\r?\n[\t\s]*(.*)/g,"\r\n$1"),
                     shortDescription: pattern.ShortDescription[0]
                 });
               });
@@ -150,4 +150,3 @@ export class SpotBugsFileProcessor {
         });
     }
 }
-

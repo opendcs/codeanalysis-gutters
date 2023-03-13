@@ -13,7 +13,7 @@ export class Bug {
         const pattern = SpotBugsFileProcessor.bugPatterns.get(this.typeAbbrev);
         msg.appendMarkdown(`## ${pattern?.shortDescription}\r\n---\r\n\r\n`);
         msg.appendMarkdown(`${pattern?.details}`);
-        //msg.isTrusted = true;
+        msg.isTrusted = true;
         msg.supportHtml = true;        
         return {
             hoverMessage: msg,
