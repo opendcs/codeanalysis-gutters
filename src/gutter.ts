@@ -104,9 +104,9 @@ export class CPDGutters {
     renderSpotbugsGutters() {
         const editor = vscode.window.activeTextEditor;
         if (this.spotbugsState === State.renderOff) {
-            editor?.setDecorations(this.config.cpdConfig.decTypeCritical,[]);
-            editor?.setDecorations(this.config.cpdConfig.decTypeMajor,[]);
-            editor?.setDecorations(this.config.cpdConfig.decTypeMinor,[]);
+            editor?.setDecorations(this.config.spotbugsConfig.decTypeHigh,[]);
+            editor?.setDecorations(this.config.spotbugsConfig.decTypeNormal,[]);
+            editor?.setDecorations(this.config.spotbugsConfig.decTypeLow,[]);
             return;
         }
 

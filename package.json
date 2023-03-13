@@ -78,7 +78,33 @@
         "view": "spotbugs.Bugs",
         "contents": "No Spotbugs files found or not processed yet."
       }
-    ]    
+    ],
+    "colors": [
+      {
+        "id": "duplicateStatus.critical",
+        "description": "Background highlight color to make large sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#fa4d5620",
+          "light": "#da1e2820"
+        }
+      },
+      {
+        "id": "duplicateStatus.major",
+        "description": "Background highlight color to make medium sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#ff832b20",
+          "light": "#ff832b20"
+        }
+      },
+      {
+        "id": "duplicateStatus.minor",
+        "description": "Background highlight color to make small sections of duplicated code obvious.",
+        "defaults": {
+          "dark": "#f1c21b20",
+          "light": "#f1c21b20"
+        }
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

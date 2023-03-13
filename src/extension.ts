@@ -9,9 +9,10 @@ import { SpotBugsTreeProvider } from './data/spotbugs/SpotBugsTree';
 import { CPDGutters } from './gutter';
 
 export function activate(context: vscode.ExtensionContext) {
+	
+	let config = CodeAnalysisConfig.instance;
 	let spotbugsData = new SpotBugsCache();
-	let data = new CPDCache();
-	let config = new CodeAnalysisConfig();
+	let data = new CPDCache();	
 	let cpdGutters = new CPDGutters(data,spotbugsData,config,context);
 	let duplicateProvider = new DuplicateCodeProvider(data);
 	let spotbugsProvider = new SpotBugsTreeProvider(spotbugsData);
