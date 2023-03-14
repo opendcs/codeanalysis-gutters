@@ -1,6 +1,6 @@
 {
-  "name": "codeanalysis-gutters",
-  "displayName": "codeanalysis-gutters",
+  "name": "codeanalysis",
+  "displayName": "codeanalysis",
   "description": "Render information from various code analysis tools. Starting with PMD-CPD and Spotbugs.",
   "version": "0.0.4",
   "repository": {
@@ -19,36 +19,36 @@
   "contributes": {
     "commands": [
       {
-        "command": "codeanalysis-gutters.pmd.showDuplicates",
+        "command": "codeanalysis.pmd.showDuplicates",
         "title": "Show Duplicate Code",
         "category": "Code Analysis-PMD"
       },
       {
-        "command": "codeanalysis-gutters.pmd.hideDuplicates",
+        "command": "codeanalysis.pmd.hideDuplicates",
         "title": "Hide Duplicate Code Indicators",
         "category": "Code Analysis-PMD"
       },
       {
-        "command": "codeanalysis-gutters.pmd.refreshDuplicates",
+        "command": "codeanalysis.pmd.refreshDuplicates",
         "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
       },{
-        "command": "codeanalysis-gutters.spotbugs.showBugs",
+        "command": "codeanalysis.spotbugs.showBugs",
         "title": "Show Spotbugs data",
         "category": "Code Analysis-Spotbugs"
       },
       {
-        "command": "codeanalysis-gutters.spotbugs.hideBugs",
+        "command": "codeanalysis.spotbugs.hideBugs",
         "title": "Hide Spotbugs Data",
         "category": "Code Analysis-Spotbugs"
       },
       {
-        "command": "codeanalysis-gutters.spotbugs.refreshBugs",
+        "command": "codeanalysis.spotbugs.refreshBugs",
         "title": "Refresh Spotbugs",
         "category": "Code Analysis-Spotbugs"
       },
       {
-        "command": "codeanalysis-gutters.spotbugs.Confidence",
+        "command": "codeanalysis.spotbugs.Confidence",
         "title": "Select Bug Confidence",
         "category": "Code Analysis-Spotbugs"
 
@@ -88,7 +88,7 @@
     "menus": {
       "view/title": [
         {
-          "command": "codeanalysis-gutters.spotbugs.Confidence",
+          "command": "codeanalysis.spotbugs.Confidence",
           "when": "view == spotbugs.Bugs",
           "group": "navigation"
         }

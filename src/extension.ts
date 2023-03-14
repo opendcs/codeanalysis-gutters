@@ -18,26 +18,26 @@ export function activate(context: vscode.ExtensionContext) {
 	let duplicateProvider = new DuplicateCodeProvider(data);
 	let spotbugsProvider = new SpotBugsTreeProvider(spotbugsData);
 
-	let showCPDGutters = vscode.commands.registerCommand('codeanalysis-gutters.pmd.showDuplicates', () => {
+	let showCPDGutters = vscode.commands.registerCommand('codeanalysis.pmd.showDuplicates', () => {
 		cpdGutters.showDuplicates();
 	});
-	let hideCPDGutters = vscode.commands.registerCommand('codeanalysis-gutters.pmd.hideDuplicates', () => {
+	let hideCPDGutters = vscode.commands.registerCommand('codeanalysis.pmd.hideDuplicates', () => {
 		cpdGutters.hideDuplicates();
-	});let showSpotBugsGutters = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.showBugs', () => {
+	});let showSpotBugsGutters = vscode.commands.registerCommand('codeanalysis.spotbugs.showBugs', () => {
         cpdGutters.showSpotBugs();
     });
-    let hideSpotBugsGutters = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.hideBugs', () => {
+    let hideSpotBugsGutters = vscode.commands.registerCommand('codeanalysis.spotbugs.hideBugs', () => {
         cpdGutters.hideSpotBugs();
     });
-    let refreshSpotbugsTree = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.refreshBugs', () => {
+    let refreshSpotbugsTree = vscode.commands.registerCommand('codeanalysis.spotbugs.refreshBugs', () => {
         spotbugsProvider.refresh();
     });
 
-	let refreshCPDTree = vscode.commands.registerCommand('codeanalysis-gutters.pmd.refreshDuplicates', () => {
+	let refreshCPDTree = vscode.commands.registerCommand('codeanalysis.pmd.refreshDuplicates', () => {
 		duplicateProvider.refresh();
 	});
 
-	let selectSpotbugsConfidence = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.Confidence', () => {
+	let selectSpotbugsConfidence = vscode.commands.registerCommand('codeanalysis.spotbugs.Confidence', () => {
 		var currentConfidences = config.spotbugsConfig.confidences;
 		vscode.window
 		    .showQuickPick(CONFIDENCES.map(c=> {
