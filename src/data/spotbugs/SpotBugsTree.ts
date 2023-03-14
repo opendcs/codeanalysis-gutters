@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { CodeAnalysisConfig } from '../../config';
 import { SpotBugsCache} from './cache';
 import { Bug,FileReport } from './types';
 
@@ -45,14 +46,17 @@ class SpotBugsReportNode implements SpotBugsNode {
     ) {}
 
     children(): SpotBugsNode[] | undefined {
-        return this.report.bugs.map((bug)=>new SpotBugsBugNode(bug));
+        const config = CodeAnalysisConfig.instance.spotbugsConfig;
+        return this.report.bugs.filter(bug=>config.confidences.includes(bug.priority))
+                               .map((bug)=>new SpotBugsBugNode(bug));
     }
 
     item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        const config = CodeAnalysisConfig.instance.spotbugsConfig;
         return {
             resourceUri: this.reportSource,
             tooltip: this.reportSource.toString(),
-            description: `${this.report.bugs.length} bugs`,
+            description: `${this.report.bugs.filter(bug=>config.confidences.includes(bug.priority)).length} bugs`,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed
         };
     }

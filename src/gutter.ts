@@ -116,10 +116,12 @@ export class CPDGutters {
                 var high = new Array<vscode.DecorationOptions>();
                 var normal = new Array<vscode.DecorationOptions>();
                 var low = new Array<vscode.DecorationOptions>();
-
+                const config = CodeAnalysisConfig.instance.spotbugsConfig;
                 const bugs = this.spotbugsBugs.getBugs(vscode.Uri.file(openFile));
                 bugs?.forEach((report)=>{
-                    report.bugs.forEach(bug=>{
+                    report.bugs
+                          .filter(bug=>config.confidences.includes(bug.priority))                    
+                          .forEach(bug=>{
                         if(bug.priority === 1) {
                             high.push(bug.getDecorationInfo());
                         } else if(bug.priority === 2) {
