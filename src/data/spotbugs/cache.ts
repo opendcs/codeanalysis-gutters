@@ -11,6 +11,7 @@ export class SpotBugsCache {
     private reports: Map<string,Map<string,FileReport>>;
     private callbacks = new Array<()=>void>();
     private fileHunter: FileHunter;
+    private activeConfidences: Array<number> = [1,2,3];
 
     public constructor() {
         this.reports = new Map<string,Map<string,FileReport>>();
@@ -91,5 +92,13 @@ export class SpotBugsCache {
 
     public getKnownFiles(): Array<vscode.Uri> {
         return Array.from(this.reports.keys(),(v,k) => expandedUri(v) );
+    }
+
+    public setConfidences(confidenceSet: Array<number>): void {
+        this.activeConfidences = confidenceSet;
+    }
+
+    public getConfidences() : Array<number> {
+        return this.activeConfidences;
     }
 }

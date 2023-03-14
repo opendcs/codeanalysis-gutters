@@ -30,22 +30,28 @@
       },
       {
         "command": "codeanalysis-gutters.pmd.refreshDuplicates",
-        "title": "Code Analysis-PMD: Refresh Duplicate Tree",
+        "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
       },{
         "command": "codeanalysis-gutters.spotbugs.showBugs",
         "title": "Show Spotbugs data",
-        "category": "Code Analysis-PMD"
+        "category": "Code Analysis-Spotbugs"
       },
       {
         "command": "codeanalysis-gutters.spotbugs.hideBugs",
         "title": "Hide Spotbugs Data",
-        "category": "Code Analysis-PMD"
+        "category": "Code Analysis-Spotbugs"
       },
       {
         "command": "codeanalysis-gutters.spotbugs.refreshBugs",
-        "title": "Code Analysis-PMD: Refresh Spotbugs",
-        "category": "Code Analysis-PMD"
+        "title": "Refresh Spotbugs",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis-gutters.spotbugs.Confidence",
+        "title": "Select Bug Confidence",
+        "category": "Code Analysis-Spotbugs"
+
       }
     ],
     "views": {
@@ -79,6 +85,15 @@
         "contents": "No Spotbugs files found or not processed yet."
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "codeanalysis-gutters.spotbugs.Confidence",
+          "when": "view == spotbugs.Bugs",
+          "group": "navigation"
+        }
+      ]
+    },
     "colors": [
       {
         "id": "duplicateStatus.critical",

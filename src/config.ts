@@ -46,10 +46,13 @@ export class CPDConfig {
     }    
 }
 
+
+
 export class SpotBugsConfig {
     public readonly colorHigh = new vscode.ThemeColor("spotbugs.highConfidence");
     public readonly colorNormal = new vscode.ThemeColor("spotbugs.normalConfidence");
     public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
+    public confidences: Array<number> = [1,2,3];
 
     public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
@@ -75,16 +78,27 @@ export class SpotBugsConfig {
         overviewRulerLane: vscode.OverviewRulerLane.Center
     });
 
-    public constructor() {}
+    public constructor() {
+    }
+
+    public getConfidences(): Array<number> {
+        return this.confidences;
+    }
+
+    public setConfidences(confidences: Array<number>) {
+        this.confidences = confidences;
+    }
 }
 
 
-export class CodeAnalysisConfig {
+export class CodeAnalysisConfig implements vscode.Disposable{
     public readonly cpdConfig = new CPDConfig(300,700);
     public readonly spotbugsConfig = new SpotBugsConfig();
     public static readonly instance = new CodeAnalysisConfig();
 
     private constructor() {
 
+    }
+    dispose() {
     }
 }

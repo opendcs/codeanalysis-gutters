@@ -5,6 +5,7 @@ import { CodeAnalysisConfig } from './config';
 import { CPDCache } from './data/cpd/cache';
 import { DuplicateCodeProvider } from './data/cpd/treedata';
 import { SpotBugsCache } from './data/spotbugs/cache';
+import { CONFIDENCES } from './data/spotbugs/gui/confidence';
 import { SpotBugsTreeProvider } from './data/spotbugs/SpotBugsTree';
 import { CPDGutters } from './gutter';
 
@@ -36,13 +37,35 @@ export function activate(context: vscode.ExtensionContext) {
 		duplicateProvider.refresh();
 	});
 
+	let selectSpotbugsConfidence = vscode.commands.registerCommand('codeanalysis-gutters.spotbugs.Confidence', () => {
+		var currentConfidences = config.spotbugsConfig.confidences;
+		vscode.window
+		    .showQuickPick(CONFIDENCES.map(c=> {
+				if ( currentConfidences.includes(c.value) ) {
+					c.picked = true;
+				} else {
+					c.picked = undefined;
+				}
+				return c;
+			}),
+			{canPickMany:true}).then((confidences)=> {
+				if(confidences) {
+					config.spotbugsConfig.setConfidences(confidences?.map(v=>v.value)||[]);
+					cpdGutters.renderSpotbugsGutters();
+					spotbugsProvider.refresh();
+				} // otherwise operation was cancelled
+		});
+	});
+
 	context.subscriptions.push(showCPDGutters,
 		hideCPDGutters,
 		refreshCPDTree,
 		showSpotBugsGutters,
 		hideSpotBugsGutters,
 		refreshSpotbugsTree,
-		);
+		selectSpotbugsConfidence,
+		config
+	);
 
 	vscode.window.registerTreeDataProvider('cpd.DuplicateCode',duplicateProvider);
 	vscode.window.registerTreeDataProvider('spotbugs.Bugs',spotbugsProvider);
