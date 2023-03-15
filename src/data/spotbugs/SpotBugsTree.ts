@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { CodeAnalysisConfig } from '../../config';
 import { SpotBugsCache} from './cache';
+import { CONFIDENCE_MAP } from './gui/confidence';
 import { Bug,FileReport } from './types';
 
 interface SpotBugsNode {
@@ -27,7 +28,7 @@ class SpotBugsBugNode implements SpotBugsNode {
         const config = CodeAnalysisConfig.instance().spotbugsConfig;
         return {
             resourceUri: this.bug.sourceFile,            
-            description: `${this.bug.startLine}: Category ${this.bug.category}, Rank ${this.bug.rank}, Confidence ${config.confidences.includes(this.bug.priority)}`,
+            description: `${this.bug.startLine}: Category ${this.bug.category}, Rank ${this.bug.rank}, Confidence ${CONFIDENCE_MAP.get(this.bug.priority)?.label}`,
             tooltip: `${this.bug.longMessage}`,
             command: {
                 command: 'vscode.open',
@@ -49,6 +50,7 @@ class SpotBugsReportNode implements SpotBugsNode {
     children(): SpotBugsNode[] | undefined {
         const config = CodeAnalysisConfig.instance().spotbugsConfig;
         return this.report.bugs.filter(bug=>config.confidences.includes(bug.priority))
+                               .filter(bug=>bug.rank <= config.getMinimumRank())
                                .map((bug)=>new SpotBugsBugNode(bug));
     }
 
@@ -57,7 +59,9 @@ class SpotBugsReportNode implements SpotBugsNode {
         return {
             resourceUri: this.reportSource,
             tooltip: this.reportSource.toString(),
-            description: `${this.report.bugs.filter(bug=>config.confidences.includes(bug.priority)).length} bugs`,
+            description: `${this.report.bugs.filter(bug=>config.confidences.includes(bug.priority))
+                                            .filter(bug=>bug.rank <= config.getMinimumRank())
+                                            .length} bugs`,
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed
         };
     }
@@ -70,10 +74,12 @@ class SpotBugsFileNode implements SpotBugsNode {
     ) {}
 
     children(): SpotBugsNode[] | undefined {
+        const config = CodeAnalysisConfig.instance().spotbugsConfig;
         var bugs = this.cache.getBugs(this.file);
         var items = new Array<SpotBugsReportNode>();
+        
         bugs.forEach((rep,source) => {
-            items.push(new SpotBugsReportNode(vscode.Uri.parse(source),rep));
+                items.push(new SpotBugsReportNode(vscode.Uri.parse(source),rep));           
         });
         return items;
     }
@@ -118,9 +124,20 @@ export class SpotBugsTreeProvider implements vscode.TreeDataProvider<SpotBugsNod
         if (element) {
             return element.children();
         } else {
+            const config = CodeAnalysisConfig.instance().spotbugsConfig;
             var items = new Array<SpotBugsFileNode>();
+            // TODO consider going filtering only here and passing on.
             this.bugCache.getKnownFiles().forEach((file)=>{
-                items.push(new SpotBugsFileNode(file,this.bugCache));
+                var hasBugs = false;
+                this.bugCache.getBugs(file).forEach((rep,file)=> {
+                    if(rep.bugs.filter(bug=>config.confidences.includes(bug.priority))
+                    .filter(bug=>bug.rank <= config.getMinimumRank()).length > 0) {
+                        hasBugs = true;
+                    }
+                });
+                if(hasBugs) {
+                    items.push(new SpotBugsFileNode(file,this.bugCache));
+                }
             });
             return items;
         }

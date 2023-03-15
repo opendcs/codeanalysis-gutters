@@ -120,7 +120,8 @@ export class CPDGutters {
                 const bugs = this.spotbugsBugs.getBugs(vscode.Uri.file(openFile));
                 bugs?.forEach((report)=>{
                     report.bugs
-                          .filter(bug=>config.confidences.includes(bug.priority))                    
+                          .filter(bug=>config.confidences.includes(bug.priority))
+                          .filter(bug=>bug.rank <= config.getMinimumRank())                   
                           .forEach(bug=>{
                         if(bug.priority === 1) {
                             high.push(bug.getDecorationInfo());

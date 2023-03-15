@@ -1,7 +1,7 @@
 import * as vscode  from "vscode";
 import { SpotBugsConfig } from "../../config";
 import { SpotBugsCache } from "./cache";
-import { lowConfidence, normalConfidence, highConfidence, CONFIDENCES } from "./gui/confidence";
+import { lowConfidence, normalConfidence, highConfidence, CONFIDENCES, RANKS } from "./gui/confidence";
 import { SpotBugsTreeProvider } from "./SpotBugsTree";
 
 export function setupSpotbugs(context: vscode.ExtensionContext, config: SpotBugsConfig,data: SpotBugsCache): void {
@@ -9,6 +9,10 @@ export function setupSpotbugs(context: vscode.ExtensionContext, config: SpotBugs
     vscode.window.registerTreeDataProvider('spotbugs.Bugs',spotbugsProvider);
 
     config.onConfidenceChange((c)=>{
+        spotbugsProvider.refresh();
+    });
+
+    config.onRankChange(r=>{
         spotbugsProvider.refresh();
     });
 
@@ -52,6 +56,8 @@ export function setupSpotbugs(context: vscode.ExtensionContext, config: SpotBugs
 		config.setConfidences(newConfidences);
 	});
 
+    
+
 	let selectSpotbugsConfidence = vscode.commands.registerCommand('codeanalysis.spotbugs.Confidence', () => {
 		var currentConfidences = config.confidences;
 		vscode.window
@@ -70,6 +76,17 @@ export function setupSpotbugs(context: vscode.ExtensionContext, config: SpotBugs
 				} // otherwise operation was cancelled
 		});
 	});
+
+    let selectSpotbugsRank = vscode.commands.registerCommand('codeanalysis.spotbugs.Ranks', () => {
+        var currentRank = config.getMinimumRank();
+        vscode.window.showQuickPick(RANKS,{canPickMany:false})
+                    .then(rank => {
+                        if(rank) {
+                            config.setMinimumRank(rank.startValue);
+                        }
+                    });
+    });
+
     context.subscriptions.push(
         selectSpotbugsConfidence,
 		spotbugsShowLow,
@@ -77,6 +94,7 @@ export function setupSpotbugs(context: vscode.ExtensionContext, config: SpotBugs
 		spotbugsHideNormal,
 		spotbugsShowNormal,
 		spotbugsShowHigh,
-		spotbugsHideHigh
+		spotbugsHideHigh,
+        selectSpotbugsRank
     );
 }

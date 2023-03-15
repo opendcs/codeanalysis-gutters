@@ -56,6 +56,11 @@
         "category": "Code Analysis-Spotbugs"
       },
       {
+        "command": "codeanalysis.spotbugs.Ranks",
+        "title": "Select minimum Bug Rank",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
         "command": "codeanalysis.spotbugs.confidence.showLow",
         "title": "-  Low",
         "enablement": "view == spotbugs.Bugs",

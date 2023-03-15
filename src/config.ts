@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CONFIDENCE_KEY, updateConfidenceFilterContext } from './data/spotbugs/gui/confidence';
+import { CONFIDENCE_KEY, rankConcerning, rankScariest, RANK_KEY, updateConfidenceFilterContext } from './data/spotbugs/gui/confidence';
 
 
 export class CPDConfig {
@@ -48,6 +48,7 @@ export class CPDConfig {
 }
 
 export type ConfidenceChangeCallBack = (confidences: Array<number>) => void;
+export type RankChangeCallback = (minRank: number) => void;
 
 export class SpotBugsConfig {    
     
@@ -56,6 +57,8 @@ export class SpotBugsConfig {
     public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
     public confidences: Array<number> = [1,2,3];
     private confidenceChangeCallBacks: Array<ConfidenceChangeCallBack> = [];
+    private minimumRank: number = rankConcerning.startValue;
+    private rankChangeCallbacks: Array<RankChangeCallback> = [];
 
     public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
@@ -84,6 +87,7 @@ export class SpotBugsConfig {
     public constructor(private readonly context: vscode.ExtensionContext) {
         this.onConfidenceChange((c) => updateConfidenceFilterContext(c));
         this.setConfidences(context.workspaceState.get(CONFIDENCE_KEY) || [1,2,3]);
+        this.setMinimumRank(context.workspaceState.get(RANK_KEY) || rankConcerning.startValue);
     }
 
     public getConfidences(): Array<number> {
@@ -98,8 +102,30 @@ export class SpotBugsConfig {
         });
     }
 
+    public getMinimumRank(): Number {
+        return this.minimumRank;
+    }
+
+    public setMinimumRank(rank: number| Array<number>) {
+        
+        if(rank instanceof Array<number> ) {
+            rank.sort();
+            this.minimumRank = rank[-1];
+        } else {
+            this.minimumRank = rank;
+        }
+        this.context.workspaceState.update(RANK_KEY,this.minimumRank);
+        this.rankChangeCallbacks.forEach(cb=>{
+            cb(this.minimumRank);
+        });
+    }
+
     public onConfidenceChange(cb: ConfidenceChangeCallBack): void {
         this.confidenceChangeCallBacks.push(cb);
+    }
+
+    public onRankChange(cb: RankChangeCallback): void {
+        this.rankChangeCallbacks.push(cb);
     }
 }
 

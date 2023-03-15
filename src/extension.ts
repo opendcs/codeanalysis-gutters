@@ -22,6 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
 		cpdGutters.renderSpotbugsGutters();
 	});
 
+	config.spotbugsConfig.onRankChange((c)=>{
+		cpdGutters.renderSpotbugsGutters();
+	});
+
 	setupSpotbugs(context,config.spotbugsConfig,spotbugsData);
 	let showCPDGutters = vscode.commands.registerCommand('codeanalysis.pmd.showDuplicates', () => {
 		cpdGutters.showDuplicates();
