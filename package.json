@@ -12,7 +12,9 @@
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Other","Linters","Programming Languages"
+    "Other",
+    "Linters",
+    "Programming Languages"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
@@ -32,7 +34,8 @@
         "command": "codeanalysis.pmd.refreshDuplicates",
         "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
-      },{
+      },
+      {
         "command": "codeanalysis.spotbugs.showBugs",
         "title": "Show Spotbugs data",
         "category": "Code Analysis-Spotbugs"
@@ -51,7 +54,48 @@
         "command": "codeanalysis.spotbugs.Confidence",
         "title": "Select Bug Confidence",
         "category": "Code Analysis-Spotbugs"
-
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.showLow",
+        "title": "-  Low",
+        "enablement": "view == spotbugs.Bugs",
+        "icon": "blank",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.hideLow",
+        "title": "✓ Low",
+        "icon": "check",
+        "enablement": "view == spotbugs.Bugs",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.showNormal",
+        "title": "-  Normal",
+        "enablement": "view == spotbugs.Bugs",
+        "icon": "blank",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.hideNormal",
+        "title": "✓  Normal",
+        "icon": "check",
+        "enablement": "view == spotbugs.Bugs",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.showHigh",
+        "title": "-  High",
+        "enablement": "view == spotbugs.Bugs",
+        "icon": "blank",
+        "category": "Code Analysis-Spotbugs"
+      },
+      {
+        "command": "codeanalysis.spotbugs.confidence.hideHigh",
+        "title": "✓  High",
+        "icon": "check",
+        "enablement": "view == spotbugs.Bugs",
+        "category": "Code Analysis-Spotbugs"
       }
     ],
     "views": {
@@ -89,20 +133,55 @@
       "view/title": [
         {
           "when": "view == spotbugs.Bugs",
-          "submenu": "spotbugs.filter"          
+          "submenu": "spotbugs.filter"
         }
       ],
       "spotbugs.filter": [
         {
-          "command": "codeanalysis.spotbugs.Confidence"
+          "submenu": "spotbugs.filter.confidence"
+        }
+      ],
+      "spotbugs.filter.confidence": [
+        {
+          "command": "codeanalysis.spotbugs.confidence.showLow",
+          "when": "codeanalysis.spotbugs.confidence.low.show == false",
+          "group": "confidence@1"
+        },
+        {
+          "command": "codeanalysis.spotbugs.confidence.hideLow",
+          "when": "codeanalysis.spotbugs.confidence.low.show == true",
+          "group": "confidence@1"
+        },
+        {
+          "command": "codeanalysis.spotbugs.confidence.showNormal",
+          "when": "codeanalysis.spotbugs.confidence.normal.show == false",
+          "group": "confidence@2"
+        },
+        {
+          "command": "codeanalysis.spotbugs.confidence.hideNormal",
+          "when": "codeanalysis.spotbugs.confidence.normal.show == true",
+          "group": "confidence@2"
+        },
+        {
+          "command": "codeanalysis.spotbugs.confidence.showHigh",
+          "when": "codeanalysis.spotbugs.confidence.high.show == false",
+          "group": "confidence@3"
+        },
+        {
+          "command": "codeanalysis.spotbugs.confidence.hideHigh",
+          "when": "codeanalysis.spotbugs.confidence.high.show == true",
+          "group": "confidence@3"
         }
       ]
     },
     "submenus": [
       {
         "id": "spotbugs.filter",
-        "icon": "$(bug)",
         "label": "Filter"
+      },
+      {
+        "id": "spotbugs.filter.confidence",
+        "label": "Confidence"
       }
     ],
     "colors": [
@@ -180,6 +259,7 @@
   },
   "dependencies": {
     "@types/xml2js": "0.4.11",
+    "@vscode/codicons": "^0.0.32",
     "xml2js": "0.4.23"
   },
   "vsce": {

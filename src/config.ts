@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { CONFIDENCE_KEY, updateConfidenceFilterContext } from './data/spotbugs/gui/confidence';
 
 
 export class CPDConfig {
@@ -46,7 +47,7 @@ export class CPDConfig {
     }    
 }
 
-const CONFIDENCE_KEY = "confidences";
+export type ConfidenceChangeCallBack = (confidences: Array<number>) => void;
 
 export class SpotBugsConfig {    
     
@@ -54,6 +55,7 @@ export class SpotBugsConfig {
     public readonly colorNormal = new vscode.ThemeColor("spotbugs.normalConfidence");
     public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
     public confidences: Array<number> = [1,2,3];
+    private confidenceChangeCallBacks: Array<ConfidenceChangeCallBack> = [];
 
     public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
         isWholeLine: true,
@@ -80,7 +82,8 @@ export class SpotBugsConfig {
     });
 
     public constructor(private readonly context: vscode.ExtensionContext) {
-        this.confidences = context.workspaceState.get(CONFIDENCE_KEY) || [1,2,3];
+        this.onConfidenceChange((c) => updateConfidenceFilterContext(c));
+        this.setConfidences(context.workspaceState.get(CONFIDENCE_KEY) || [1,2,3]);
     }
 
     public getConfidences(): Array<number> {
@@ -90,6 +93,13 @@ export class SpotBugsConfig {
     public setConfidences(confidences: Array<number>) {
         this.confidences = confidences;
         this.context.workspaceState.update(CONFIDENCE_KEY,confidences);
+        this.confidenceChangeCallBacks.forEach((cb)=> {
+            cb(confidences);
+        });
+    }
+
+    public onConfidenceChange(cb: ConfidenceChangeCallBack): void {
+        this.confidenceChangeCallBacks.push(cb);
     }
 }
 

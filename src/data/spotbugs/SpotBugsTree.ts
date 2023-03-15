@@ -106,6 +106,7 @@ export class SpotBugsTreeProvider implements vscode.TreeDataProvider<SpotBugsNod
 
     refresh(): void {
         this._onDidChangeTreeData.fire();
+        
     }
 
 
