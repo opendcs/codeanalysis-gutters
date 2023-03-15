@@ -88,12 +88,23 @@
     "menus": {
       "view/title": [
         {
-          "command": "codeanalysis.spotbugs.Confidence",
           "when": "view == spotbugs.Bugs",
-          "group": "navigation"
+          "submenu": "spotbugs.filter"          
+        }
+      ],
+      "spotbugs.filter": [
+        {
+          "command": "codeanalysis.spotbugs.Confidence"
         }
       ]
     },
+    "submenus": [
+      {
+        "id": "spotbugs.filter",
+        "icon": "$(bug)",
+        "label": "Filter"
+      }
+    ],
     "colors": [
       {
         "id": "duplicateStatus.critical",
