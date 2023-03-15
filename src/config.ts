@@ -46,9 +46,10 @@ export class CPDConfig {
     }    
 }
 
+const CONFIDENCE_KEY = "confidences";
 
-
-export class SpotBugsConfig {
+export class SpotBugsConfig {    
+    
     public readonly colorHigh = new vscode.ThemeColor("spotbugs.highConfidence");
     public readonly colorNormal = new vscode.ThemeColor("spotbugs.normalConfidence");
     public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
@@ -78,7 +79,8 @@ export class SpotBugsConfig {
         overviewRulerLane: vscode.OverviewRulerLane.Center
     });
 
-    public constructor() {
+    public constructor(private readonly context: vscode.ExtensionContext) {
+        this.confidences = context.workspaceState.get(CONFIDENCE_KEY) || [1,2,3];
     }
 
     public getConfidences(): Array<number> {
@@ -87,18 +89,34 @@ export class SpotBugsConfig {
 
     public setConfidences(confidences: Array<number>) {
         this.confidences = confidences;
+        this.context.workspaceState.update(CONFIDENCE_KEY,confidences);
     }
 }
 
 
 export class CodeAnalysisConfig implements vscode.Disposable{
     public readonly cpdConfig = new CPDConfig(300,700);
-    public readonly spotbugsConfig = new SpotBugsConfig();
-    public static readonly instance = new CodeAnalysisConfig();
+    public readonly spotbugsConfig: SpotBugsConfig;
+    private static staticInstance: CodeAnalysisConfig;
 
-    private constructor() {
-
+    private constructor(private readonly context: vscode.ExtensionContext) {
+        this.spotbugsConfig = new SpotBugsConfig(context);
     }
+
+    public static init(context: vscode.ExtensionContext): void {
+        if (CodeAnalysisConfig.staticInstance == null) {
+            CodeAnalysisConfig.staticInstance = new CodeAnalysisConfig(context);
+        }
+    }
+
+    public static instance(): CodeAnalysisConfig {
+        if (!CodeAnalysisConfig.staticInstance) {
+            throw new Error("Config must be initialized with the ExtensionContext first.");
+        }
+        return CodeAnalysisConfig.staticInstance;
+    }
+
     dispose() {
+
     }
 }

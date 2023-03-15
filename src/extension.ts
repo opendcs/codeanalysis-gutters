@@ -10,8 +10,8 @@ import { SpotBugsTreeProvider } from './data/spotbugs/SpotBugsTree';
 import { CPDGutters } from './gutter';
 
 export function activate(context: vscode.ExtensionContext) {
-	
-	let config = CodeAnalysisConfig.instance;
+	CodeAnalysisConfig.init(context);
+	let config = CodeAnalysisConfig.instance();
 	let spotbugsData = new SpotBugsCache();
 	let data = new CPDCache();	
 	let cpdGutters = new CPDGutters(data,spotbugsData,config,context);

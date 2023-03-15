@@ -46,13 +46,13 @@ class SpotBugsReportNode implements SpotBugsNode {
     ) {}
 
     children(): SpotBugsNode[] | undefined {
-        const config = CodeAnalysisConfig.instance.spotbugsConfig;
+        const config = CodeAnalysisConfig.instance().spotbugsConfig;
         return this.report.bugs.filter(bug=>config.confidences.includes(bug.priority))
                                .map((bug)=>new SpotBugsBugNode(bug));
     }
 
     item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        const config = CodeAnalysisConfig.instance.spotbugsConfig;
+        const config = CodeAnalysisConfig.instance().spotbugsConfig;
         return {
             resourceUri: this.reportSource,
             tooltip: this.reportSource.toString(),

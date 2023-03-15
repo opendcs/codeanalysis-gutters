@@ -116,7 +116,7 @@ export class CPDGutters {
                 var high = new Array<vscode.DecorationOptions>();
                 var normal = new Array<vscode.DecorationOptions>();
                 var low = new Array<vscode.DecorationOptions>();
-                const config = CodeAnalysisConfig.instance.spotbugsConfig;
+                const config = CodeAnalysisConfig.instance().spotbugsConfig;
                 const bugs = this.spotbugsBugs.getBugs(vscode.Uri.file(openFile));
                 bugs?.forEach((report)=>{
                     report.bugs
