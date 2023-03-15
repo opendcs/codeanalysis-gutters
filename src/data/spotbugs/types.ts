@@ -12,7 +12,7 @@ export class Bug {
                     `# Confidence: ${Bug.confidence[this.priority]} `
                    + ` Rank: ${this.rank}, Category: ${SpotBugsFileProcessor.bugCategories.get(this.category)}\r\n---\r\n\r\n`);
         msg.appendMarkdown(`${this.longMessage}\n`);
-        const pattern = SpotBugsFileProcessor.bugPatterns.get(this.typeAbbrev);
+        const pattern = SpotBugsFileProcessor.bugPatterns.get(this.type);
         msg.appendMarkdown(`## ${pattern?.shortDescription}\r\n---\r\n\r\n`);
         msg.appendMarkdown(`${pattern?.details}`);
         msg.isTrusted = true;

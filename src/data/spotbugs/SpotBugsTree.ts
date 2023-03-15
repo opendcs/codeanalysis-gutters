@@ -24,9 +24,10 @@ class SpotBugsBugNode implements SpotBugsNode {
         return undefined;
     }
     item(): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        const config = CodeAnalysisConfig.instance().spotbugsConfig;
         return {
             resourceUri: this.bug.sourceFile,            
-            description: `${this.bug.startLine}: Category ${this.bug.category}, Rank ${this.bug.rank}, Priority ${this.bug.priority}`,
+            description: `${this.bug.startLine}: Category ${this.bug.category}, Rank ${this.bug.rank}, Confidence ${config.confidences.includes(this.bug.priority)}`,
             tooltip: `${this.bug.longMessage}`,
             command: {
                 command: 'vscode.open',

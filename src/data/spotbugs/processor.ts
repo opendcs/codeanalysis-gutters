@@ -106,7 +106,7 @@ export class SpotBugsFileProcessor {
         Object.keys(collection["BugPattern"])
               .forEach((_value,index)=>{
                 var pattern = collection["BugPattern"][index];
-                SpotBugsFileProcessor.bugPatterns.set(pattern.$.abbrev, {
+                SpotBugsFileProcessor.bugPatterns.set(pattern.$.type, {
                     pattern: {
                         abbrev: pattern.$.abbrev,
                         type: pattern.$.type,
