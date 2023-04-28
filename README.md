@@ -20,11 +20,15 @@ No settings at this time.
 ## Known Issues
 
 - I've just started this thing, it worked for my use-case. I'm quite sure it has problems.
-- The color choice is terrible and doesn't account for themes.
+- The color choice is terrible and doesn't account for themes. Help Welcome.
 
 ## Release Notes
 
 Initial release.
+
+### 0.0.3
+
+- Generally usable. Can filter by different options to reduce cognitive load.
 
 ### 0.0.1
 
